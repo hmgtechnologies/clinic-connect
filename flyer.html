@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flyer | Clinic Connect — HMG Concepts</title>
+    <link rel="icon" href="assets/img/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        @media print{.noprint{display:none!important}body{background:#fff}}
+        .flyer{width:800px;max-width:100%;margin:20px auto;background:linear-gradient(160deg,#4f46e5,#7c3aed);color:#fff;border-radius:20px;overflow:hidden}
+        .flyer .body{padding:36px}
+        .feat{display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,.12);border-radius:12px;padding:12px}
+        .qr{background:#fff;padding:8px;border-radius:10px}
+    </style>
+</head>
+<body>
+    <div class="container noprint" style="padding:16px 20px;display:flex;justify-content:space-between;align-items:center">
+        <a class="brandmark" href="index.html" style="color:inherit"><img src="assets/img/logo.png" alt="logo" style="height:30px"> Clinic Connect</a>
+        <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Print / Save as PDF</button>
+    </div>
+
+    <div class="flyer">
+        <div style="background:rgba(0,0,0,.15);padding:18px 36px;display:flex;align-items:center;gap:12px">
+            <img src="assets/img/logo.png" style="height:46px;width:46px;border-radius:10px;background:#fff;padding:4px">
+            <div><div style="font-weight:900;font-size:20px">Clinic Connect <span style="font-size:12px;background:rgba(255,255,255,.25);padding:1px 7px;border-radius:999px">new</span></div><div style="opacity:.85;font-size:12px;letter-spacing:1px">BY HMG CONCEPTS · DATATECH</div></div>
+        </div>
+        <div class="body">
+            <h1 style="font-size:40px;margin:0 0 8px;font-weight:900;line-height:1.1">Give Your Clinic a Complete Digital System — <span style="color:#fde047">Free</span></h1>
+            <p style="font-size:17px;opacity:.95;margin:0 0 22px">Patients/EMR, consultations & vitals, prescriptions, lab tests, pharmacy with expiry alerts, wards & admissions, billing, finance, roster, referrals, analytics & audit log & more. No coding. No monthly fees. No AI APIs. You own it forever.</p>
+            <div class="grid g2" style="gap:12px;margin-bottom:22px">
+                <div class="feat"><i class="fas fa-bolt" style="font-size:20px"></i><div><b>Ready in minutes</b><br><span style="opacity:.85;font-size:13px">Fill a form, preview live, download.</span></div></div>
+                <div class="feat"><i class="fas fa-coins" style="font-size:20px"></i><div><b>₦0 to run</b><br><span style="opacity:.85;font-size:13px">Free database + free hosting.</span></div></div>
+                <div class="feat"><i class="fas fa-shield-halved" style="font-size:20px"></i><div><b>Secure & private</b><br><span style="opacity:.85;font-size:13px">You own all your data.</span></div></div>
+                <div class="feat"><i class="fas fa-mobile-screen" style="font-size:20px"></i><div><b>Installable app</b><br><span style="opacity:.85;font-size:13px">Works on phones & tablets.</span></div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;background:rgba(255,255,255,.12);border-radius:14px;padding:18px">
+                <div>
+                    <div style="font-weight:900;font-size:22px">Start free today</div>
+                    <div style="opacity:.9;font-size:14px;margin-top:4px"><i class="fas fa-globe"></i> hmgconcepts.pages.dev</div>
+                    <div style="opacity:.9;font-size:14px"><i class="fab fa-whatsapp"></i> wa.me/2348100866322</div>
+                </div>
+                <div class="qr" id="qr"></div>
+            </div>
+            <p style="text-align:center;opacity:.8;font-size:12px;margin:18px 0 0">A product of HMG Concepts — His Marvellous Grace · EdTech · DataTech · FaithTech</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        try { new QRCode(document.getElementById('qr'), { text: 'https://hmgconcepts.pages.dev', width: 96, height: 96 }); }
+        catch (e) { document.getElementById('qr').innerHTML = '<span style="color:#333;font-size:10px">QR</span>'; }
+    </script>
+</body>
+</html>

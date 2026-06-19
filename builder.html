@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinic Connect — Build a Clinic Management System | HMG Concepts</title>
+    <meta name="description" content="Generate a complete, free clinic management system — members, attendance, finance, events, gallery & more. By HMG Concepts.">
+    <link rel="icon" href="assets/img/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+    <!-- Topbar -->
+    <div class="topbar"><div class="container">
+        <a class="brandmark" href="index.html" style="color:inherit"><img src="assets/img/logo.png" alt="logo"> ClinicClinic&nbsp;Connectnbsp;Connect</a>
+        <div class="pill-row">
+            <button class="btn btn-ghost" style="padding:7px 12px" onclick="Wizard.save()" title="Save your answers as a file"><i class="fas fa-floppy-disk"></i> Save</button>
+            <button class="btn btn-ghost" style="padding:7px 12px" onclick="document.getElementById('loadFile').click()" title="Load a saved project"><i class="fas fa-folder-open"></i> Load</button>
+            <button class="btn btn-ghost" style="padding:7px 12px" onclick="Wizard.share()" title="Create a link the client can open to pre-fill this builder"><i class="fas fa-share-nodes"></i> Share</button>
+            <input type="file" id="loadFile" accept=".json" class="hide" onchange="Wizard.load(event)">
+            <a class="btn btn-ghost" href="guide.html" style="padding:7px 12px"><i class="fas fa-book"></i> Guide</a>
+            <a class="btn btn-ghost" href="projects.html" style="padding:7px 12px"><i class="fas fa-folder-tree"></i> Projects</a>
+        </div>
+    </div></div>
+
+    <!-- Full preview modal -->
+    <div id="fpModal" class="hide" style="position:fixed;inset:0;z-index:200;background:rgba(15,23,42,.7);padding:20px">
+        <div style="max-width:1100px;margin:0 auto;background:#fff;border-radius:14px;overflow:hidden;height:calc(100vh - 40px);display:flex;flex-direction:column">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border)">
+                <b><i class="fas fa-display brand-text"></i> Full Platform Preview <span class="muted small">(sample data)</span></b>
+                <button class="btn btn-ghost" style="padding:6px 12px" onclick="document.getElementById('fpModal').classList.add('hide')"><i class="fas fa-xmark"></i> Close</button>
+            </div>
+            <iframe id="fpFrame" style="flex:1;border:0;width:100%"></iframe>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero">
+        <div class="container">
+            <h1>Launch a Clinic Management System — Free, in Minutes</h1>
+            <p>Fill a short form, pick your colours, fonts, layout & features, and download a ready‑to‑deploy, clinic management system — staff, CRM, sales, POS, online storefront, invoices, inventory, purchasing, finance, payroll, HR, projects, assets, analytics, audit log and more. No coding. No monthly fees. No AI APIs.</p>
+            <button class="btn btn-ghost btn-lg" onclick="document.getElementById('wizard').scrollIntoView({behavior:'smooth'})"><i class="fas fa-wand-magic-sparkles"></i> Start Building</button>
+        </div>
+    </div>
+
+    <div class="container" id="wizard" style="padding-top:30px">
+        <!-- Stepper -->
+        <div class="steps" id="steps"></div>
+
+        <div class="grid" style="grid-template-columns:1.1fr .9fr;align-items:start;gap:24px" id="layoutWrap">
+            <!-- LEFT: steps -->
+            <div>
+                <!-- Step 1: Clinic details -->
+                <div class="card step-panel" data-step="0">
+                    <h2 class="section-title">1 · Clinic Details</h2>
+                    <p class="muted small" style="margin-top:0">Start from a preset (optional) — it pre‑fills layout, colours, features & structure. You can edit everything afterwards.</p>
+                    <label class="label" style="margin-top:12px">Quick‑start preset</label>
+                    <div class="grid g2" id="presets" style="margin-bottom:18px"></div>
+                    <hr style="border:none;border-top:1px solid var(--border);margin:6px 0 16px">
+                    <div class="grid g2" style="margin-top:4px">
+                        <div><label class="label">Clinic / Hospital Name *</label><input class="input" id="businessName" placeholder="e.g. Crest Academy"></div>
+                        <div><label class="label">Short Name</label><input class="input" id="shortName" placeholder="e.g. Grace Chapel"></div>
+                        <div><label class="label">Motto / Slogan</label><input class="input" id="motto" placeholder="e.g. A place of grace"></div>
+                        <div><label class="label">Currency</label><input class="input" id="currency" value="₦"></div>
+                        <div><label class="label">Phone</label><input class="input" id="phone" placeholder="0800..."></div>
+                        <div><label class="label">Email</label><input class="input" id="email" placeholder="info@clinic.com"></div>
+                        <div style="grid-column:1/-1"><label class="label">Address</label><input class="input" id="address" placeholder="Street, City, State"></div>
+                        <div style="grid-column:1/-1"><label class="label">Branches / Locations (optional, comma‑separated)</label><input class="input" id="campuses" placeholder="e.g. Head Office, Lagos Branch, Abuja Branch"></div>
+                        <div style="grid-column:1/-1"><label class="label">Bank / Payment Details (for invoices)</label><textarea class="input" id="giving" rows="2" placeholder="Bank name, account number, etc."></textarea></div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Branding -->
+                <div class="card step-panel hide" data-step="1">
+                    <h2 class="section-title">2 · Branding</h2>
+                    <label class="label">Logo (PNG/JPG, square works best)</label>
+                    <input type="file" id="logo" accept="image/*" class="input" style="margin-bottom:8px">
+                    <div id="logoPrev"></div>
+                    <label class="label" style="margin-top:16px">Colour Theme</label>
+                    <div class="grid g4" id="palettes"></div>
+                    <label class="label" style="margin-top:16px">Font</label>
+                    <div class="grid g3" id="fonts"></div>
+                </div>
+
+                <!-- Step 3: Layout -->
+                <div class="card step-panel hide" data-step="2">
+                    <h2 class="section-title">3 · Layout & UI</h2>
+                    <p class="muted small" style="margin-top:0">Choose how members navigate the platform.</p>
+                    <div class="grid g3" id="layouts" style="margin-top:14px"></div>
+                </div>
+
+                <!-- Step 4: Structure -->
+                <div class="card step-panel hide" data-step="3">
+                    <h2 class="section-title">4 · Clinic Structure</h2>
+                    <label class="label">Departments / Units</label>
+                    <div class="pill-row" id="departments"></div>
+                    <label class="label" style="margin-top:16px">Staff Categories / Team Tiers</label>
+                    <div class="pill-row" id="ageGroups"></div>
+                    <label class="label" style="margin-top:16px">Activities / Modus Operandi</label>
+                    <div class="pill-row" id="activities"></div>
+                </div>
+
+                <!-- Step 5: Features -->
+                <div class="card step-panel hide" data-step="4">
+                    <h2 class="section-title">5 · Features</h2>
+                    <p class="muted small" style="margin-top:0">Pick the modules to include. Members & Dashboard are always on.</p>
+                    <div class="grid g2" id="features" style="margin-top:14px"></div>
+                </div>
+
+                <!-- Step 6: Connect & generate -->
+                <div class="card step-panel hide" data-step="5">
+                    <h2 class="section-title">6 · Connect & Generate</h2>
+                    <p class="muted small" style="margin-top:0">Optional: paste your free Supabase keys now, or later in <code>config.js</code>. (Setup steps are in the generated README.)</p>
+                    <div class="grid" style="margin-top:14px">
+                        <div><label class="label">Supabase Project URL</label><input class="input" id="supabaseUrl" placeholder="https://xxxx.supabase.co"></div>
+                        <div><label class="label">Supabase anon key</label><input class="input" id="supabaseKey" placeholder="eyJhbGci..."></div>
+                    </div>
+                    <div class="card" style="background:#eef2ff;border:none;margin-top:16px">
+                        <b><i class="fas fa-circle-info brand-text"></i> What you'll get</b>
+                        <p class="small muted" style="margin:6px 0 0">A ZIP with a complete website (HTML/CSS/JS), a one‑click Supabase <code>schema.sql</code>, PWA support, and a step‑by‑step README — all free to host on GitHub Pages / Cloudflare / Vercel.</p>
+                    </div>
+
+                    <!-- Pricing calculator (optional setup service quote) -->
+                    <div class="card" style="margin-top:16px">
+                        <h3 style="margin:0 0 6px"><i class="fas fa-calculator brand-text"></i> Setup Quote <span class="muted small" style="font-weight:400">(optional service)</span></h3>
+                        <p class="muted small" style="margin:0 0 10px">The platform runs free. This estimates an optional build/setup service. Tick any add-ons:</p>
+                        <div id="addons" class="grid" style="gap:8px"></div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;border-top:1px solid var(--border);padding-top:10px">
+                            <b>Estimated total</b>
+                            <b id="quoteTotal" class="brand-text" style="font-size:20px">—</b>
+                        </div>
+                    </div>
+
+                    <!-- Lead capture -->
+                    <div class="card" style="margin-top:16px">
+                        <h3 style="margin:0 0 6px"><i class="fas fa-paper-plane brand-text"></i> Get this build / Request help</h3>
+                        <p class="muted small" style="margin:0 0 10px">Optional — send your details to HMG Concepts (opens WhatsApp/email pre-filled with your selections). Nothing is stored on a server.</p>
+                        <div class="grid g2">
+                            <input class="input" id="leadName" placeholder="Your name">
+                            <input class="input" id="leadContact" placeholder="Your phone or email">
+                        </div>
+                        <div class="grid g2" style="margin-top:10px">
+                            <button class="btn btn-ghost" onclick="Wizard.lead('whatsapp')" style="background:#25D366;color:#fff"><i class="fab fa-whatsapp"></i> Send via WhatsApp</button>
+                            <button class="btn btn-ghost" onclick="Wizard.lead('email')"><i class="fas fa-envelope"></i> Send via Email</button>
+                        </div>
+                    </div>
+
+                    <div class="grid g2" style="margin-top:18px">
+                        <button class="btn btn-ghost btn-lg" onclick="Wizard.fullPreview()"><i class="fas fa-display"></i> Preview Platform</button>
+                        <button class="btn btn-primary btn-lg" onclick="Wizard.generate()"><i class="fas fa-download"></i> Generate & Download</button>
+                    </div>
+                    <button class="btn btn-ghost" style="width:100%;margin-top:10px" onclick="Wizard.proposal()"><i class="fas fa-file-lines"></i> Print Proposal / Spec Sheet (PDF)</button>
+                    <p class="muted small" style="text-align:center;margin-top:10px">Your details never leave your browser — generation is 100% local.</p>
+                </div>
+
+                <!-- Nav buttons -->
+                <div style="display:flex;justify-content:space-between;margin-top:18px">
+                    <button class="btn btn-ghost" id="prevBtn" onclick="Wizard.prev()"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-primary" id="nextBtn" onclick="Wizard.next()">Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- RIGHT: live preview -->
+            <div style="position:sticky;top:84px">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                    <b><i class="fas fa-eye brand-text"></i> Live Preview</b>
+                    <button class="btn btn-ghost" style="padding:6px 12px;font-size:13px" onclick="Wizard.fullPreview()"><i class="fas fa-up-right-and-down-left-from-center"></i> Full Preview</button>
+                </div>
+                <div class="preview"><iframe id="preview"></iframe></div>
+                <p class="muted small" style="text-align:center;margin-top:8px">Click <b>Full Preview</b> to click through every page with sample data.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why us -->
+    <div class="container" style="margin-top:50px">
+        <div class="grid g3">
+            <div class="card"><i class="fas fa-coins brand-text" style="font-size:24px"></i><h3>Zero Running Cost</h3><p class="muted small">Built on free tools (Supabase + static hosting). No monthly fees, no AI API.</p></div>
+            <div class="card"><i class="fas fa-bolt brand-text" style="font-size:24px"></i><h3>Ready in Minutes</h3><p class="muted small">Answer a few questions and download a working platform you fully own.</p></div>
+            <div class="card"><i class="fas fa-shield-halved brand-text" style="font-size:24px"></i><h3>Secure by Design</h3><p class="muted small">Supabase Auth + Row Level Security. Admin approval workflow built in.</p></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <img src="assets/img/logo.png" style="height:40px;border-radius:9px;margin-bottom:10px">
+            <p>Clinic Connect is a product of <b style="color:#fff">HMG Concepts</b> — His Marvellous Grace.<br>EdTech · DataTech · FaithTech</p>
+            <p class="pill-row" style="justify-content:center">
+                <a href="https://hmgconcepts.pages.dev" target="_blank">HMG Concepts</a> ·
+                <a href="https://hmgacademy.pages.dev" target="_blank">Academy</a> ·
+                <a href="https://hmgmedia.pages.dev" target="_blank">Media</a> ·
+                <a href="https://hmggospel.pages.dev" target="_blank">Gospel</a> ·
+                <a href="https://cssadewale.pages.dev" target="_blank">Adewale S. Adeagbo</a> ·
+                <a href="https://wa.me/2348100866322" target="_blank">WhatsApp</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="assets/js/catalog.js"></script>
+    <script src="assets/js/templates.js"></script>
+    <script src="assets/js/preview.js"></script>
+    <script src="assets/js/generator.js"></script>
+    <script src="assets/js/chatbot.js"></script>
+    <script src="assets/js/wizard.js"></script>
+</body>
+</html>

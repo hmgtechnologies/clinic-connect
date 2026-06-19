@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide | Clinic Connect — HMG Concepts</title>
+    <link rel="icon" href="assets/img/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>.doc h2{margin-top:32px} .doc code{background:#eef2ff;color:#4f46e5;padding:2px 6px;border-radius:6px;font-size:13px} .doc li{margin:6px 0} .doc pre{background:#0f172a;color:#e2e8f0;padding:14px;border-radius:10px;overflow-x:auto;font-size:13px}</style>
+</head>
+<body>
+    <div class="topbar"><div class="container">
+        <a class="brandmark" href="index.html" style="color:inherit"><img src="assets/img/logo.png" alt="logo"> ClinicClinic&nbsp;Connectnbsp;Connect</a>
+        <div class="pill-row"><a class="btn btn-primary" href="builder.html" style="padding:7px 16px"><i class="fas fa-wand-magic-sparkles"></i> Build Now</a></div>
+    </div></div>
+
+    <div class="container doc" style="max-width:820px;padding:34px 20px">
+        <h1>Clinic Connect — Operator & Deployment Guide</h1>
+        <p class="muted">Everything you need to build an enterprise-grade clinic platform and deploy it — using only <b>free</b> tools (Supabase free tier + free static hosting). <b>No AI API — it is not cost effective.</b></p>
+
+        <div class="card" style="background:#eef2ff;border:none">
+            <b><i class="fas fa-circle-info brand-text"></i> Two parts</b>
+            <p class="small" style="margin:6px 0 0">(A) Use the <b>builder</b> to create the platform. (B) Follow <b>deployment</b> to make it live for the clinic.</p>
+        </div>
+
+        <h2>A · Using the Builder</h2>
+        <ol>
+            <li>Open <a href="builder.html">builder.html</a>.</li>
+            <li><b>Step 1 — Clinic Details:</b> name, motto, contact, bank/payment details, currency.</li>
+            <li><b>Step 2 — Branding:</b> upload the clinic logo, pick a colour theme and a font.</li>
+            <li><b>Step 3 — Layout & UI:</b> choose Sidebar, Top‑nav or Card‑hub navigation.</li>
+            <li><b>Step 4 — Structure:</b> tick the clinic's departments, age groups & activities.</li>
+            <li><b>Step 5 — Features:</b> toggle modules (members & dashboard are always on).</li>
+            <li><b>Step 6 — Connect & Generate:</b> optionally paste Supabase keys, then either
+                <b>Preview Platform</b> (click through every page with sample data) or
+                <b>Generate &amp; Download</b> the ZIP.</li>
+        </ol>
+        <p><b>Save / Load:</b> use the <i>Save</i> button to keep a client's answers as a JSON
+        file, and <i>Load</i> to bring them back later. Your work also auto‑saves in the browser.</p>
+
+        <h2>B · Deploying the Generated Platform</h2>
+        <p>Inside the downloaded ZIP you'll find a <code>README.md</code> with these same steps.</p>
+
+        <h3>Step 1 — Create the free database (Supabase)</h3>
+        <ol>
+            <li>Go to <a href="https://supabase.com" target="_blank">supabase.com</a> → create a free account → <b>New project</b> (save the database password).</li>
+            <li>Wait ~2 minutes for it to provision.</li>
+            <li>Open <b>SQL Editor → New query</b>, paste ALL of <code>database/schema.sql</code> from the ZIP, click <b>Run</b>. (Safe to re‑run.)</li>
+            <li>(Optional, quicker logins) <b>Authentication → Providers → Email</b> → turn <b>Confirm email</b> OFF.</li>
+        </ol>
+
+        <h3>Step 2 — Connect the app to the database</h3>
+        <ol>
+            <li>In Supabase: <b>Project Settings → API</b>. Copy the <b>Project URL</b> and the <b>anon public</b> key.</li>
+            <li>Open <code>assets/js/config.js</code> in the ZIP and paste them into <code>SUPABASE_URL</code> and <code>SUPABASE_KEY</code>.</li>
+            <li>🔒 Never paste the <i>service_role</i> key here — only the <b>anon</b> key belongs in the browser.</li>
+        </ol>
+
+        <h3>Step 3 — Publish online (pick one, all free)</h3>
+        <ul>
+            <li><b>GitHub Pages:</b> create a repo → upload the ZIP's contents (so <code>index.html</code> is at the root) → Settings → Pages → Deploy from branch → main → / (root).</li>
+            <li><b>Cloudflare Pages / Vercel:</b> import the repo or drag the folder → Framework: None → output dir: <code>/</code> → Deploy.</li>
+        </ul>
+
+        <h3>Step 4 — Create the first admin</h3>
+        <ol>
+            <li>Open the live site → <b>Request Access</b> → sign up.</li>
+            <li>In Supabase → SQL Editor, run (with your email):</li>
+        </ol>
+        <pre>UPDATE profiles SET role='admin', status='approved'
+WHERE email='you@example.com';</pre>
+        <p>Refresh — admin tools unlock. New sign‑ups stay <b>pending</b> until an admin approves them.</p>
+
+        <h2>Admin Capabilities (oversight & coordination)</h2>
+        <ul>
+            <li><b>People & Roles:</b> approve sign‑ups and set each person's role —
+                <b>staff, manager or admin</b> — on the People page.</li>
+            <li><b>CRM / Customers:</b> capture leads & customers and move them through
+                a pipeline (lead → contacted → qualified → customer).</li>
+            <li><b>Sales / Deals:</b> track opportunities and revenue by stage.</li>
+            <li><b>Invoices:</b> create invoices, track paid/outstanding, and print a
+                <b>branded invoice PDF</b> per customer.</li>
+            <li><b>Inventory:</b> manage stock with quick +/- adjustments and
+                <b>low‑stock alerts</b>.</li>
+            <li><b>Finance:</b> income & expense ledger with live balance.</li>
+            <li><b>Projects, Tasks, Appointments, Support Tickets, HR/Leave:</b> run
+                day‑to‑day operations.</li>
+            <li><b>Broadcast:</b> notify staff or customers in bulk via WhatsApp/Email/SMS.</li>
+            <li><b>Events / Announcements / Documents / Gallery / Feedback:</b>
+                communicate, share & collect reviews.</li>
+            <li><b>Departments & Units:</b> see headcount per department for coordination.</li>
+        </ul>
+
+        <h2>Enterprise Modules (new in v2)</h2>
+        <p class="muted small">All built on the same free Supabase + static stack — no extra cost, no AI APIs.</p>
+        <ul>
+            <li><b>Point of Sale (POS):</b> a fast retail checkout. Tap products into a
+                cart and complete a sale — it records an order, posts the income to
+                <b>Finance</b>, and automatically reduces <b>Inventory</b>.</li>
+            <li><b>Online Orders / Storefront:</b> a public <code>shop.html</code> page
+                (no login) where customers browse in‑stock products and place orders.
+                Orders appear in the admin <b>Online Orders</b> page with status control.</li>
+            <li><b>Quotations / Estimates:</b> create branded quotes, print them as PDF,
+                and convert an accepted quote into an invoice with one click.</li>
+            <li><b>Purchase Orders & Suppliers/Vendors:</b> raise POs to suppliers, track
+                receiving, and keep a categorised supplier directory.</li>
+            <li><b>Asset Register:</b> track equipment — tag, category, location, who holds
+                it, value and status (in‑use / repair / retired).</li>
+            <li><b>Expense Claims:</b> staff submit expenses; managers approve/reject.
+                Approved claims auto‑post to <b>Finance</b> as expenses.</li>
+            <li><b>Payroll & Payslips:</b> run a salary (gross − deductions = net),
+                auto‑post the cost to Finance, and print a <b>payslip PDF</b> per staff.</li>
+            <li><b>Timesheets:</b> staff log hours per day/project for billing & payroll.</li>
+            <li><b>Goals / KPIs / Appraisal:</b> set objectives with targets and visual
+                progress bars; update progress as work is done.</li>
+            <li><b>Recruitment:</b> track job applicants through a hiring pipeline.</li>
+            <li><b>Contracts & Renewals:</b> store agreements with value & expiry — items
+                expiring within 30 days are flagged for renewal.</li>
+            <li><b>Knowledge Base / SOPs:</b> a searchable library of policies & how‑tos.</li>
+            <li><b>Compliance & Policies:</b> a register of policies with review dates and
+                compliance status.</li>
+            <li><b>In‑App Inbox:</b> private staff↔management messaging inside the app.</li>
+            <li><b>Reports & Export:</b> download any dataset (staff, sales, finance, etc.)
+                as Excel (.xlsx) or CSV for accounting, audits & backup.</li>
+            <li><b>Analytics & Charts:</b> visual dashboards — income vs expense, sales
+                pipeline and a monthly income trend (Chart.js, loaded free via CDN).</li>
+            <li><b>Audit Log:</b> an automatic trail of key admin actions (approvals,
+                role changes, sales, payroll, etc.) for accountability & oversight.</li>
+            <li><b>Settings & Backup:</b> view the org profile, list active modules, and
+                download a full <b>JSON data backup</b> of the entire database anytime.</li>
+        </ul>
+
+        <h2>Point of Sale (POS) — receipts & barcode scanning</h2>
+        <ul>
+            <li><b>Scan to sell:</b> a USB barcode scanner types the SKU and adds the
+                product automatically (Enter), or tap <b>Camera</b> to scan with a
+                phone/tablet camera (uses the free html5-qrcode library via CDN).</li>
+            <li><b>Discounts & change:</b> apply a discount, choose a payment method,
+                enter the amount tendered and the screen shows the change due.</li>
+            <li><b>Receipts:</b> completing a sale opens a printable, thermal-style
+                receipt and (as before) records the order, posts income to Finance and
+                reduces Inventory automatically.</li>
+            <li>Tip: give each product a <b>SKU/barcode</b> and a <b>reorder level</b>
+                in Inventory so scanning and low-stock alerts work well.</li>
+        </ul>
+
+        <h2>Free Automation Pack (optional)</h2>
+        <p>If included, the ZIP contains <code>supabase/functions/</code> with ready-made
+        <b>Edge Functions</b> and a step-by-step <code>docs/AUTOMATION.md</code>. These are
+        <b>100% free</b> (Supabase free tier + Resend free email tier) and use <b>NO paid
+        AI API</b>. The app works fully without them.</p>
+        <ul>
+            <li><b>daily-digest</b> — posts a daily summary (income, expense, orders,
+                low stock) to the in-app Inbox and emails admins.</li>
+            <li><b>low-stock-alert</b> — emails admins + Inbox notice when stock hits the
+                reorder level.</li>
+            <li><b>renewal-reminders</b> — flags expiring contracts and unpaid invoices.</li>
+        </ul>
+        <p class="muted small">Deploy with the free Supabase CLI and schedule with free
+        Supabase Cron — full commands are in <code>docs/AUTOMATION.md</code>. The
+        <code>service_role</code> key stays only in Supabase's secret vault, never in your
+        website code.</p>
+
+        <h2>Security model (Row Level Security)</h2>
+        <ul>
+            <li>Every table has <b>RLS</b> on. Signed‑in staff can read shared data;
+                only <b>admins</b> can write management tables.</li>
+            <li><b>Expenses, timesheets & leave</b> use per‑user rules: each person can
+                only submit/see their own rows; admins manage all.</li>
+            <li>The public <b>storefront</b> can insert orders only (it cannot read or
+                edit any other data) — safe to share publicly.</li>
+            <li>The <code>service_role</code> key is never used in the browser; only the
+                <b>anon</b> key goes in <code>config.js</code>.</li>
+        </ul>
+
+        <h2>Roles Explained</h2>
+        <ul>
+            <li><b>admin</b> — full access to everything (oversight & management).</li>
+            <li><b>manager</b> — department/team lead working across modules.</li>
+            <li><b>staff</b> — team member; submits leave, tasks, tickets, etc.</li>
+        </ul>
+
+        <h2>Multi-branch</h2>
+        <p>If you list branches/locations in Step 1, a <b>branch selector</b> appears
+        in the platform header so larger clinics/hospitals can organise by location.</p>
+
+
+        <h2>Troubleshooting</h2>
+        <ul>
+            <li><b>"supabase is not defined":</b> keep the script tags in <code>index.html</code> in order (library before <code>config.js</code>).</li>
+            <li><b>Nothing loads:</b> re‑check the URL/anon key in <code>config.js</code>.</li>
+            <li><b>Can't see admin tools:</b> run the admin SQL in Step 4.</li>
+            <li><b>Photos won't upload:</b> ensure you ran the full <code>schema.sql</code> (it creates the storage buckets).</li>
+        </ul>
+
+        <div class="card" style="margin-top:30px;text-align:center">
+            <b>Need a custom build or help?</b>
+            <p class="muted small">Clinic Connect is by <b class="brand-text">HMG Concepts</b>.</p>
+            <p class="pill-row" style="justify-content:center">
+                <a class="btn btn-ghost" href="https://hmgconcepts.pages.dev" target="_blank">HMG Concepts</a>
+                <a class="btn btn-ghost" href="https://cssadewale.pages.dev" target="_blank">Portfolio</a>
+                <a class="btn btn-primary" href="https://wa.me/2348100866322" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="footer"><div class="container"><p>© HMG Concepts — Clinic Connect. EdTech · DataTech · FaithTech.</p></div></div>
+</body>
+</html>

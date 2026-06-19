@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects | Clinic Connect — HMG Concepts</title>
+    <link rel="icon" href="assets/img/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="topbar"><div class="container">
+        <a class="brandmark" href="index.html" style="color:inherit"><img src="assets/img/logo.png" alt="logo"> ClinicClinic&nbsp;Connectnbsp;Connect</a>
+        <div class="pill-row">
+            <a class="btn btn-ghost" href="guide.html" style="padding:7px 12px"><i class="fas fa-book"></i> Guide</a>
+            <a class="btn btn-primary" href="builder.html" style="padding:7px 16px"><i class="fas fa-plus"></i> New Project</a>
+        </div>
+    </div></div>
+
+    <div class="container" style="padding:30px 20px">
+        <h1 style="margin:0 0 4px">Agency Dashboard</h1>
+        <p class="muted">Track every clinic platform you've built. Saved privately in this browser (localStorage).</p>
+
+        <div class="grid g4" style="margin:20px 0">
+            <div class="card"><div class="muted small">Projects</div><div id="k-total" style="font-size:28px;font-weight:900">0</div></div>
+            <div class="card"><div class="muted small">Delivered</div><div id="k-done" style="font-size:28px;font-weight:900" class="brand-text">0</div></div>
+            <div class="card"><div class="muted small">In progress</div><div id="k-prog" style="font-size:28px;font-weight:900">0</div></div>
+            <div class="card"><div class="muted small">Pipeline value</div><div id="k-value" style="font-size:24px;font-weight:900">₦0</div></div>
+        </div>
+
+        <div class="card" style="margin-bottom:18px">
+            <h3 style="margin:0 0 10px"><i class="fas fa-plus-circle brand-text"></i> Log a Project</h3>
+            <div class="grid g4">
+                <input class="input" id="np-name" placeholder="Clinic name">
+                <input class="input" id="np-contact" placeholder="Contact (phone/email)">
+                <select class="input" id="np-status"><option>Lead</option><option>In progress</option><option>Delivered</option></select>
+                <input class="input" id="np-value" type="number" placeholder="Quote (₦)">
+            </div>
+            <button class="btn btn-primary" style="margin-top:10px" onclick="Projects.add()">Save Project</button>
+            <span class="muted small" style="margin-left:10px">Tip: in the builder, <b>Save</b> downloads a full project JSON you can re-load anytime.</span>
+        </div>
+
+        <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                <h3 style="margin:0"><i class="fas fa-folder-tree brand-text"></i> Projects</h3>
+                <div class="pill-row">
+                    <button class="btn btn-ghost" style="padding:6px 12px" onclick="Projects.exportAll()"><i class="fas fa-download"></i> Export</button>
+                    <button class="btn btn-ghost" style="padding:6px 12px" onclick="document.getElementById('imp').click()"><i class="fas fa-upload"></i> Import</button>
+                    <input type="file" id="imp" class="hide" accept=".json" onchange="Projects.importAll(event)">
+                </div>
+            </div>
+            <div style="overflow-x:auto"><table>
+                <thead><tr><th>Clinic / Hospital</th><th>Contact</th><th>Status</th><th>Quote</th><th>Updated</th><th></th></tr></thead>
+                <tbody id="rows"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">No projects yet.</td></tr></tbody>
+            </table></div>
+        </div>
+    </div>
+
+    <div class="footer"><div class="container"><p>© HMG Concepts — Clinic Connect. EdTech · DataTech · FaithTech.</p></div></div>
+
+    <script>
+    const Projects = {
+        key: 'bc-projects',
+        all() { try { return JSON.parse(localStorage.getItem(this.key) || '[]'); } catch (e) { return []; } },
+        save(list) { localStorage.setItem(this.key, JSON.stringify(list)); this.render(); },
+        add() {
+            const name = document.getElementById('np-name').value.trim();
+            if (!name) { alert('Enter a clinic name.'); return; }
+            const list = this.all();
+            list.unshift({ id: Date.now(), name, contact: document.getElementById('np-contact').value.trim(),
+                status: document.getElementById('np-status').value, value: +document.getElementById('np-value').value || 0,
+                updated: new Date().toISOString() });
+            this.save(list);
+            ['np-name','np-contact','np-value'].forEach(i => document.getElementById(i).value = '');
+        },
+        setStatus(id, s) { const l = this.all(); const p = l.find(x => x.id === id); if (p) { p.status = s; p.updated = new Date().toISOString(); } this.save(l); },
+        del(id) { if (!confirm('Delete this project?')) return; this.save(this.all().filter(x => x.id !== id)); },
+        exportAll() { const b = new Blob([JSON.stringify(this.all(), null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'business-connect-projects.json'; a.click(); },
+        importAll(e) { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { try { const d = JSON.parse(r.result); if (Array.isArray(d)) { this.save(d); alert('Imported.'); } } catch (x) { alert('Invalid file.'); } }; r.readAsText(f); e.target.value=''; },
+        money(n) { return '₦' + Number(n||0).toLocaleString(); },
+        render() {
+            const list = this.all();
+            document.getElementById('k-total').textContent = list.length;
+            document.getElementById('k-done').textContent = list.filter(p => p.status === 'Delivered').length;
+            document.getElementById('k-prog').textContent = list.filter(p => p.status === 'In progress').length;
+            document.getElementById('k-value').textContent = this.money(list.reduce((s, p) => s + (+p.value || 0), 0));
+            const b = document.getElementById('rows');
+            if (!list.length) { b.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">No projects yet.</td></tr>'; return; }
+            const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+            b.innerHTML = list.map(p => `<tr>
+                <td><b>${esc(p.name)}</b></td><td>${esc(p.contact)}</td>
+                <td><select class="input" style="padding:5px;max-width:130px" onchange="Projects.setStatus(${p.id},this.value)">${['Lead','In progress','Delivered'].map(s => `<option ${p.status===s?'selected':''}>${s}</option>`).join('')}</select></td>
+                <td>${this.money(p.value)}</td><td class="muted small">${new Date(p.updated).toLocaleDateString()}</td>
+                <td><button class="btn btn-ghost" style="padding:4px 10px;font-size:12px" onclick="Projects.del(${p.id})">Delete</button></td></tr>`).join('');
+        }
+    };
+    Projects.render();
+    </script>
+</body>
+</html>
